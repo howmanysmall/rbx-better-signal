@@ -1,12 +1,37 @@
 import type { Janitor } from "@rbxts/janitor";
 
 /**
- * BindableEvent wrapper which passes variables by reference instead of by value
+ * BindableEvent wrapper which passes variables by reference instead of by value.
+ *
+ * Doesn't actually use BindableEvents.
  */
-interface Signal<
+declare class Signal<
 	ConnectedFunctionSignature extends (...args: any) => any = () => void,
 	Generic extends boolean = false,
 > {
+	public constructor(janitor?: Janitor);
+
+	public static Wrap<
+		ConnectedFunctionSignature extends (...args: any) => any = () => void,
+		Generic extends boolean = false,
+		O extends Array<unknown> = Parameters<ConnectedFunctionSignature>,
+	>(
+		this: void,
+		rbxScriptSignal: RBXScriptSignal<
+			Generic extends true
+				? Parameters<ConnectedFunctionSignature> extends Array<unknown>
+					? (...args: O) => void
+					: ConnectedFunctionSignature
+				: ConnectedFunctionSignature
+		>,
+		janitor?: Janitor,
+	): Signal<ConnectedFunctionSignature, Generic>;
+
+	public static Is<
+		ConnectedFunctionSignature extends (...args: any) => any = () => void,
+		Generic extends boolean = false,
+	>(this: void, object: unknown): object is Signal<ConnectedFunctionSignature, Generic>;
+
 	/**
 	 * Fires the BindableEvent with any number of arguments
 	 * @param args The arguments to pass into the connected functions
@@ -74,12 +99,5 @@ interface Signal<
 	 */
 	Destroy(): void;
 }
-
-declare const Signal: new <
-	ConnectedFunctionSignature extends (...args: any) => any = () => void,
-	Generic extends boolean = false,
->(
-	janitor?: Janitor,
-) => Signal<ConnectedFunctionSignature, Generic>;
 
 export = Signal;

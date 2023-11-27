@@ -213,6 +213,16 @@ function Signal.Is(obj)
 end
 
 --[=[
+	Checks if the given object is a Signal.
+
+	@param obj any -- Object to check
+	@return boolean -- `true` if the object is a Signal.
+]=]
+function Signal.instanceof(obj)
+	return type(obj) == "table" and getmetatable(obj) == Signal
+end
+
+--[=[
 	@param fn ConnectionFn
 	@return SignalConnection
 
