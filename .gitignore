@@ -2,3 +2,15 @@
 /out
 /include
 *.tsbuildinfo
+
+# Roblox Studio lock files
+/*.rbxlx.lock
+/*.rbxl.lock
+**/*.rbx[lm]*
+dist/
+
+build
+**/sourcemap.json
+roblox.yml
+
+*.code-workspace
